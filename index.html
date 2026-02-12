@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Crimson+Pro:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --accent: #d4af37;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 4rem;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0) 100%);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Home Page */
+        .page {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-section {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 4rem;
+            gap: 2rem;
+        }
+
+        .hero-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 700px;
+            letter-spacing: 0.02em;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.2s forwards;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 1400px;
+            height: 55vh;
+            object-fit: cover;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease 0.3s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.6s forwards;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.8);
+        }
+
+        .scroll-prompt {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.2s forwards, bounce 2s ease-in-out 2s infinite;
+        }
+
+        .scroll-prompt span {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .scroll-arrow {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, var(--accent));
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        /* Gallery Grid */
+        .gallery-grid-section {
+            padding: 3rem 4rem 8rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: grayscale(0.3) brightness(0.7);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.8) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-label {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+
+        /* Gallery Page */
+        .gallery-header {
+            padding: 10rem 4rem 4rem;
+            text-align: center;
+        }
+
+        .gallery-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+        }
+
+        .masonry-grid {
+            column-count: 3;
+            column-gap: 1.5rem;
+            padding: 0 4rem 6rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .masonry-item img {
+            width: 100%;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .masonry-item:hover img {
+            transform: scale(1.02);
+            filter: brightness(0.85);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 1rem;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            color: var(--accent);
+        }
+
+        /* Writing Page */
+        .writing-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 12rem 4rem 6rem;
+        }
+
+        .writing-header {
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        .article-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .article-item {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 3rem;
+        }
+
+        .article-date {
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .article-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+        }
+
+        .article-excerpt {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .read-more {
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 2px;
+            transition: var(--transition);
+        }
+
+        .read-more:hover {
+            color: var(--accent);
+        }
+
+        /* About Page */
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12rem 4rem 6rem;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .about-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+        }
+
+        .about-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            letter-spacing: 0.05em;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        /* Contact Form */
+        .contact-section {
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .contact-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-primary);
+            font-family: 'Crimson Pro', serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: transparent;
+            border: 1px solid var(--text-primary);
+            color: var(--text-primary);
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+            }
+
+            .hero-section {
+                padding: 0 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .masonry-grid {
+                column-count: 2;
+                padding: 0 2rem 4rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .writing-container,
+            .about-container {
+                padding: 10rem 2rem 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">M. Eric Sherwood</div>
+        <ul class="nav-links">
+            <li><a href="#" data-page="home">Photography</a></li>
+            <li><a href="#" data-page="writing">Writing</a></li>
+            <li><a href="#" data-page="about">About</a></li>
+            <li><a href="#" data-page="contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <section class="hero-section">
+            <p class="hero-quote">"All creation declares the glory of its Maker. My work is simply to bear witness—to frame what has always been luminous."</p>
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&h=900&fit=crop" alt="Hero" class="hero-image">
+            <div class="scroll-prompt">
+                <span>Explore</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </section>
+
+        <section class="gallery-grid-section">
+            <div class="gallery-grid">
+                <div class="gallery-item" data-gallery="wilds">
+                    <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop" alt="Wilds + Blooms">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-label">Wilds + Blooms</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gallery="built">
+                    <img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&h=600&fit=crop" alt="Built">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-label">Built</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gallery="street">
+                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&h=600&fit=crop" alt="Street Stories">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-label">Street Stories</h3>
+                    </div>
+                </div>
+                <div class="gallery-item" data-gallery="wanderlust">
+                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&h=600&fit=crop" alt="Wanderlust">
+                    <div class="gallery-overlay">
+                        <h3 class="gallery-label">Wanderlust</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Gallery Pages -->
+    <div id="gallery-wilds" class="page">
+        <div class="gallery-header">
+            <h1 class="gallery-title">Wilds + Blooms</h1>
+            <p class="gallery-subtitle">Nature's Untamed Beauty</p>
+        </div>
+        <div class="masonry-grid">
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&fit=crop" alt="Nature 1"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&fit=crop" alt="Nature 2"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&fit=crop" alt="Nature 3"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&fit=crop" alt="Nature 4"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=600&fit=crop" alt="Nature 5"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=600&fit=crop" alt="Nature 6"></div>
+        </div>
+    </div>
+
+    <div id="gallery-built" class="page">
+        <div class="gallery-header">
+            <h1 class="gallery-title">Built</h1>
+            <p class="gallery-subtitle">Architecture & Urban Forms</p>
+        </div>
+        <div class="masonry-grid">
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=600&fit=crop" alt="Architecture 1"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&fit=crop" alt="Architecture 2"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?w=600&fit=crop" alt="Architecture 3"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1514984879728-be0aff75a6e8?w=600&fit=crop" alt="Architecture 4"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&fit=crop" alt="Architecture 5"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=600&fit=crop" alt="Architecture 6"></div>
+        </div>
+    </div>
+
+    <div id="gallery-street" class="page">
+        <div class="gallery-header">
+            <h1 class="gallery-title">Street Stories</h1>
+            <p class="gallery-subtitle">Life in Motion</p>
+        </div>
+        <div class="masonry-grid">
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&fit=crop" alt="Street 1"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1484910292437-025e5d13ce87?w=600&fit=crop" alt="Street 2"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&fit=crop" alt="Street 3"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&fit=crop" alt="Street 4"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1502085671122-2d218cd434e6?w=600&fit=crop" alt="Street 5"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=600&fit=crop" alt="Street 6"></div>
+        </div>
+    </div>
+
+    <div id="gallery-wanderlust" class="page">
+        <div class="gallery-header">
+            <h1 class="gallery-title">Wanderlust</h1>
+            <p class="gallery-subtitle">Places Far & Wide</p>
+        </div>
+        <div class="masonry-grid">
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&fit=crop" alt="Travel 1"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&fit=crop" alt="Travel 2"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&fit=crop" alt="Travel 3"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=600&fit=crop" alt="Travel 4"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&fit=crop" alt="Travel 5"></div>
+            <div class="masonry-item"><img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=600&fit=crop" alt="Travel 6"></div>
+        </div>
+    </div>
+
+    <!-- Writing Page -->
+    <div id="writing" class="page">
+        <div class="writing-container">
+            <div class="writing-header">
+                <h1 class="gallery-title">Writing</h1>
+                <p class="gallery-subtitle">Stories Behind the Lens</p>
+            </div>
+            <div class="article-grid">
+                <article class="article-item">
+                    <div class="article-date">January 15, 2026</div>
+                    <h2 class="article-title">Light in the Margins</h2>
+                    <p class="article-excerpt">
+                        There's a particular quality to morning light in Mombasa—golden and thick, filtering through acacia trees in ways that seem to bend time itself. I've spent the better part of seven months learning to see it, to anticipate the way it moves across corrugated tin and painted concrete.
+                    </p>
+                    <a href="#" class="read-more">Read More →</a>
+                </article>
+
+                <article class="article-item">
+                    <div class="article-date">December 28, 2025</div>
+                    <h2 class="article-title">What the Streets Remember</h2>
+                    <p class="article-excerpt">
+                        Street photography asks you to be both invisible and fully present—a paradox I'm still learning to navigate. In the chaos of market days, when bodies move like weather patterns and voices rise and fall in Swahili and English and everything between, the camera becomes less an intrusion and more a witness.
+                    </p>
+                    <a href="#" class="read-more">Read More →</a>
+                </article>
+
+                <article class="article-item">
+                    <div class="article-date">November 12, 2025</div>
+                    <h2 class="article-title">On Waiting and Seeing</h2>
+                    <p class="article-excerpt">
+                        Before we arrived in Kenya, we spent six months in limbo—visa applications stalled, futures uncertain, children asking questions we couldn't answer. Photography taught me that waiting isn't passive. It's a discipline. The best images emerge not from frantic searching but from patient observation, from learning to recognize the moment before it fully arrives.
+                    </p>
+                    <a href="#" class="read-more">Read More →</a>
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="about-container">
+            <div class="about-content">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop" alt="About" class="about-image">
+                <div class="about-text">
+                    <h2>About</h2>
+                    <p>
+                        I'm a photographer and missionary currently based in Mombasa, Kenya, where the light is generous and the stories are endless. My work explores the intersection of place and spirit—the way landscapes hold memory, the way streets reveal character, the way architecture speaks of human aspiration and limitation.
+                    </p>
+                    <p>
+                        After years of documenting the American landscape, my family and I moved to East Africa, trading familiar terrain for new ways of seeing. The transition has been both disorienting and revelatory, pushing me to reconsider everything I thought I knew about composition, narrative, and the ethics of representation.
+                    </p>
+                    <p>
+                        My photography has been featured in various publications, and I continue to work on long-form photo essays that examine themes of migration, community, and the search for home. When I'm not behind the camera, I'm developing theological curriculum, running solo TTRPG campaigns, and trying to convince my kids that yes, we really do live here now.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="about-container">
+            <div class="contact-section" style="padding-top: 8rem;">
+                <h3>Let's Work Together</h3>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; line-height: 1.8; font-size: 1.05rem;">
+                    I'm available for select photography and writing projects. Whether you're looking for compelling visual storytelling, thoughtful editorial content, or documentary work that captures the essence of place and people, I'd love to hear from you.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <label for="name2">Name</label>
+                        <input type="text" id="name2" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email2">Email</label>
+                        <input type="email" id="email2" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message2">Message</label>
+                        <textarea id="message2" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close">&times;</button>
+        <img src="" alt="Lightbox image" id="lightbox-img">
+    </div>
+
+    <script>
+        // Page navigation
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const pages = document.querySelectorAll('.page');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = link.dataset.page;
+                
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+                
+                window.scrollTo(0, 0);
+            });
+        });
+
+        // Gallery navigation
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const gallery = item.dataset.gallery;
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(`gallery-${gallery}`).classList.add('active');
+                window.scrollTo(0, 0);
+            });
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const masonryItems = document.querySelectorAll('.masonry-item');
+
+        masonryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+
+        // Escape key closes lightbox
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
