@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sherwood Photography</title>
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="Photography portfolio of M. Eric Sherwood — nature, architecture, street, and travel photography from East Africa and beyond.">
+    <meta property="og:title" content="Sherwood Photography — M. Eric Sherwood">
+    <meta property="og:description" content="Photography portfolio of M. Eric Sherwood — nature, architecture, street, and travel photography from East Africa and beyond.">
+    <meta property="og:image" content="images/hero.jpg">
+    <meta property="og:type" content="website">
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Crimson+Pro:wght@300;400&display=swap" rel="stylesheet">
     <style>
         * {
@@ -78,15 +86,17 @@
             transition: var(--transition);
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--text-primary);
         }
 
-        .nav-links a:hover::after {
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
             width: 100%;
         }
 
-        /* Home Page */
+        /* Pages */
         .page {
             display: none;
             opacity: 0;
@@ -98,53 +108,32 @@
         }
 
         @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+            to { opacity: 1; }
         }
 
+        /* Hero — full-bleed */
         .hero-section {
-            height: 85vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            height: 100vh;
             position: relative;
-            padding: 6rem 4rem 0;
-            gap: 2rem;
-        }
-
-        .hero-quote {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-style: italic;
-            color: var(--text-secondary);
-            text-align: center;
-            max-width: 700px;
-            letter-spacing: 0.02em;
-            line-height: 1.7;
-            opacity: 0;
-            animation: fadeIn 1s ease 0.2s forwards;
+            overflow: hidden;
         }
 
         .hero-image {
+            position: absolute;
+            inset: 0;
             width: 100%;
-            max-width: 1400px;
-            height: 65vh;
+            height: 100%;
             object-fit: cover;
             opacity: 0;
-            animation: fadeInUp 1.2s ease 0.3s forwards;
+            animation: fadeIn 1.2s ease 0.2s forwards;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Subtle dark overlay so text stays legible */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
         }
 
         .hero-content {
@@ -153,6 +142,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
+            z-index: 1;
             opacity: 0;
             animation: fadeIn 1s ease 0.6s forwards;
         }
@@ -183,8 +173,9 @@
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
+            z-index: 1;
             opacity: 0;
-            animation: fadeIn 1s ease 1.2s forwards, bounce 2s ease-in-out 2s infinite;
+            animation: fadeIn 1s ease 1.2s forwards, bounce 2s ease-in-out 2.2s infinite;
         }
 
         .scroll-prompt span {
@@ -201,12 +192,22 @@
         }
 
         @keyframes bounce {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(10px);
-            }
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        /* Quote strip between hero and gallery grid */
+        .hero-statement {
+            text-align: center;
+            padding: 4rem 4rem 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            line-height: 1.7;
+            letter-spacing: 0.02em;
         }
 
         /* Gallery Grid */
@@ -265,8 +266,30 @@
 
         /* Gallery Page */
         .gallery-header {
-            padding: 10rem 4rem 4rem;
+            padding: 8rem 4rem 3rem;
             text-align: center;
+            position: relative;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Crimson Pro', serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0;
+            margin-bottom: 2rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            color: var(--accent);
         }
 
         .gallery-title {
@@ -344,9 +367,32 @@
             transition: var(--transition);
         }
 
-        .lightbox-close:hover {
-            color: var(--accent);
+        .lightbox-close:hover { color: var(--accent); }
+
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 2.5rem;
+            cursor: pointer;
+            padding: 1rem 1.5rem;
+            transition: var(--transition);
+            z-index: 2001;
+            line-height: 1;
         }
+
+        .lightbox-prev { left: 1rem; }
+        .lightbox-next { right: 1rem; }
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover { color: var(--accent); }
+
+        .lightbox-prev:disabled,
+        .lightbox-next:disabled { opacity: 0.2; cursor: default; }
 
         /* Writing Page */
         .writing-container {
@@ -404,9 +450,7 @@
             transition: var(--transition);
         }
 
-        .read-more:hover {
-            color: var(--accent);
-        }
+        .read-more:hover { color: var(--accent); }
 
         /* About Page */
         .about-container {
@@ -515,6 +559,41 @@
             color: var(--bg-primary);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .form-success {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            padding: 3rem 0;
+        }
+
+        /* Footer */
+        .site-footer {
+            padding: 2.5rem 4rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+        }
+
+        .site-footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: var(--transition);
+        }
+
+        .site-footer a:hover { color: var(--accent); }
+
         /* Responsive */
         @media (max-width: 768px) {
             nav {
@@ -525,16 +604,22 @@
                 gap: 1.5rem;
             }
 
-            .hero-section {
-                padding: 0 2rem;
-            }
-
             .hero-title {
                 font-size: 2.5rem;
             }
 
             .gallery-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* Always show gallery labels on touch/mobile */
+            .gallery-overlay {
+                opacity: 1;
+                background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.85) 100%);
+            }
+
+            .gallery-grid-section {
+                padding: 2rem 1.5rem 5rem;
             }
 
             .masonry-grid {
@@ -550,6 +635,21 @@
             .writing-container,
             .about-container {
                 padding: 10rem 2rem 4rem;
+            }
+
+            .gallery-header {
+                padding: 8rem 2rem 3rem;
+            }
+
+            .hero-statement {
+                padding: 3rem 2rem 1rem;
+            }
+
+            .site-footer {
+                padding: 2rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
             }
         }
     </style>
@@ -568,9 +668,18 @@
     <!-- Home Page -->
     <div id="home" class="page active">
         <section class="hero-section">
-            <p class="hero-quote">"All creation declares the glory of it's Maker; I live to bear witness to it's song."</p>
             <img src="images/hero.jpg" alt="Hero" class="hero-image">
+            <div class="hero-content">
+                <h1 class="hero-title">M. Eric Sherwood</h1>
+                <p class="hero-tagline">Photographer &middot; Storyteller</p>
+            </div>
+            <div class="scroll-prompt">
+                <span>Scroll</span>
+                <div class="scroll-arrow"></div>
+            </div>
         </section>
+
+        <p class="hero-statement">"All creation declares the glory of its Maker; I live to bear witness to its song."</p>
 
         <section class="gallery-grid-section">
             <div class="gallery-grid">
@@ -605,142 +714,146 @@
     <!-- Gallery Pages -->
     <div id="gallery-wilds" class="page">
         <div class="gallery-header">
+            <button class="back-btn" data-page="home">← Photography</button>
             <h1 class="gallery-title">Wilds + Blooms</h1>
             <p class="gallery-subtitle">Nature's Untamed Beauty</p>
         </div>
         <div class="masonry-grid">
-            <div class="masonry-item"><img src="images/wilds/wilds-01.jpg" alt="Wilds + Blooms 1"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-02.jpg" alt="Wilds + Blooms 2"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-03.jpg" alt="Wilds + Blooms 3"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-04.jpg" alt="Wilds + Blooms 4"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-05.jpg" alt="Wilds + Blooms 5"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-06.jpg" alt="Wilds + Blooms 6"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-07.jpg" alt="Wilds + Blooms 7"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-08.jpg" alt="Wilds + Blooms 8"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-09.jpg" alt="Wilds + Blooms 9"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-10.jpg" alt="Wilds + Blooms 10"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-11.jpg" alt="Wilds + Blooms 11"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-12.jpg" alt="Wilds + Blooms 12"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-13.jpg" alt="Wilds + Blooms 13"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-14.jpg" alt="Wilds + Blooms 14"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-15.jpg" alt="Wilds + Blooms 15"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-16.jpg" alt="Wilds + Blooms 16"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-17.jpg" alt="Wilds + Blooms 17"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-18.jpg" alt="Wilds + Blooms 18"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-19.jpg" alt="Wilds + Blooms 19"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-20.jpg" alt="Wilds + Blooms 20"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-21.jpg" alt="Wilds + Blooms 21"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-22.jpg" alt="Wilds + Blooms 22"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-23.jpg" alt="Wilds + Blooms 23"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-24.jpg" alt="Wilds + Blooms 24"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-25.jpg" alt="Wilds + Blooms 25"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-26.jpg" alt="Wilds + Blooms 26"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-27.jpg" alt="Wilds + Blooms 27"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-28.jpg" alt="Wilds + Blooms 28"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-29.jpg" alt="Wilds + Blooms 29"></div>
-            <div class="masonry-item"><img src="images/wilds/wilds-30.jpg" alt="Wilds + Blooms 30"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-01.jpg" alt="Wilds + Blooms 1" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-02.jpg" alt="Wilds + Blooms 2" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-03.jpg" alt="Wilds + Blooms 3" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-04.jpg" alt="Wilds + Blooms 4" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-05.jpg" alt="Wilds + Blooms 5" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-06.jpg" alt="Wilds + Blooms 6" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-07.jpg" alt="Wilds + Blooms 7" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-08.jpg" alt="Wilds + Blooms 8" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-09.jpg" alt="Wilds + Blooms 9" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-10.jpg" alt="Wilds + Blooms 10" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-11.jpg" alt="Wilds + Blooms 11" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-12.jpg" alt="Wilds + Blooms 12" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-13.jpg" alt="Wilds + Blooms 13" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-14.jpg" alt="Wilds + Blooms 14" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-15.jpg" alt="Wilds + Blooms 15" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-16.jpg" alt="Wilds + Blooms 16" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-17.jpg" alt="Wilds + Blooms 17" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-18.jpg" alt="Wilds + Blooms 18" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-19.jpg" alt="Wilds + Blooms 19" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-20.jpg" alt="Wilds + Blooms 20" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-21.jpg" alt="Wilds + Blooms 21" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-22.jpg" alt="Wilds + Blooms 22" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-23.jpg" alt="Wilds + Blooms 23" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-24.jpg" alt="Wilds + Blooms 24" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-25.jpg" alt="Wilds + Blooms 25" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-26.jpg" alt="Wilds + Blooms 26" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-27.jpg" alt="Wilds + Blooms 27" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-28.jpg" alt="Wilds + Blooms 28" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-29.jpg" alt="Wilds + Blooms 29" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wilds/wilds-30.jpg" alt="Wilds + Blooms 30" loading="lazy"></div>
         </div>
     </div>
 
     <div id="gallery-built" class="page">
         <div class="gallery-header">
+            <button class="back-btn" data-page="home">← Photography</button>
             <h1 class="gallery-title">Built</h1>
             <p class="gallery-subtitle">Architecture & Urban Forms</p>
         </div>
         <div class="masonry-grid">
-            <div class="masonry-item"><img src="images/built/built-01.jpg" alt="Built 1"></div>
-            <div class="masonry-item"><img src="images/built/built-02.jpg" alt="Built 2"></div>
-            <div class="masonry-item"><img src="images/built/built-03.jpg" alt="Built 3"></div>
-            <div class="masonry-item"><img src="images/built/built-04.jpg" alt="Built 4"></div>
-            <div class="masonry-item"><img src="images/built/built-05.jpg" alt="Built 5"></div>
-            <div class="masonry-item"><img src="images/built/built-06.jpg" alt="Built 6"></div>
-            <div class="masonry-item"><img src="images/built/built-07.jpg" alt="Built 7"></div>
-            <div class="masonry-item"><img src="images/built/built-08.jpg" alt="Built 8"></div>
-            <div class="masonry-item"><img src="images/built/built-09.jpg" alt="Built 9"></div>
-            <div class="masonry-item"><img src="images/built/built-10.jpg" alt="Built 10"></div>
-            <div class="masonry-item"><img src="images/built/built-11.jpg" alt="Built 11"></div>
-            <div class="masonry-item"><img src="images/built/built-12.jpg" alt="Built 12"></div>
-            <div class="masonry-item"><img src="images/built/built-13.jpg" alt="Built 13"></div>
-            <div class="masonry-item"><img src="images/built/built-14.jpg" alt="Built 14"></div>
-            <div class="masonry-item"><img src="images/built/built-15.jpg" alt="Built 15"></div>
-            <div class="masonry-item"><img src="images/built/built-16.jpg" alt="Built 16"></div>
-            <div class="masonry-item"><img src="images/built/built-17.jpg" alt="Built 17"></div>
-            <div class="masonry-item"><img src="images/built/built-18.jpg" alt="Built 18"></div>
-            <div class="masonry-item"><img src="images/built/built-19.jpg" alt="Built 19"></div>
-            <div class="masonry-item"><img src="images/built/built-20.jpg" alt="Built 20"></div>
-            <div class="masonry-item"><img src="images/built/built-21.jpg" alt="Built 21"></div>
-            <div class="masonry-item"><img src="images/built/built-22.jpg" alt="Built 22"></div>
-            <div class="masonry-item"><img src="images/built/built-23.jpg" alt="Built 23"></div>
-            <div class="masonry-item"><img src="images/built/built-24.jpg" alt="Built 24"></div>
-            <div class="masonry-item"><img src="images/built/built-25.jpg" alt="Built 25"></div>
+            <div class="masonry-item"><img src="images/built/built-01.jpg" alt="Built 1" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-02.jpg" alt="Built 2" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-03.jpg" alt="Built 3" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-04.jpg" alt="Built 4" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-05.jpg" alt="Built 5" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-06.jpg" alt="Built 6" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-07.jpg" alt="Built 7" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-08.jpg" alt="Built 8" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-09.jpg" alt="Built 9" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-10.jpg" alt="Built 10" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-11.jpg" alt="Built 11" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-12.jpg" alt="Built 12" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-13.jpg" alt="Built 13" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-14.jpg" alt="Built 14" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-15.jpg" alt="Built 15" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-16.jpg" alt="Built 16" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-17.jpg" alt="Built 17" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-18.jpg" alt="Built 18" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-19.jpg" alt="Built 19" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-20.jpg" alt="Built 20" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-21.jpg" alt="Built 21" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-22.jpg" alt="Built 22" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-23.jpg" alt="Built 23" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-24.jpg" alt="Built 24" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/built/built-25.jpg" alt="Built 25" loading="lazy"></div>
         </div>
     </div>
 
     <div id="gallery-street" class="page">
         <div class="gallery-header">
+            <button class="back-btn" data-page="home">← Photography</button>
             <h1 class="gallery-title">Street Stories</h1>
             <p class="gallery-subtitle">Life in Motion</p>
         </div>
         <div class="masonry-grid">
-            <div class="masonry-item"><img src="images/street/street-01.jpg" alt="Street Stories 1"></div>
-            <div class="masonry-item"><img src="images/street/street-02.jpg" alt="Street Stories 2"></div>
-            <div class="masonry-item"><img src="images/street/street-03.jpg" alt="Street Stories 3"></div>
-            <div class="masonry-item"><img src="images/street/street-04.jpg" alt="Street Stories 4"></div>
-            <div class="masonry-item"><img src="images/street/street-05.jpg" alt="Street Stories 5"></div>
-            <div class="masonry-item"><img src="images/street/street-06.jpg" alt="Street Stories 6"></div>
-            <div class="masonry-item"><img src="images/street/street-07.jpg" alt="Street Stories 7"></div>
-            <div class="masonry-item"><img src="images/street/street-08.jpg" alt="Street Stories 8"></div>
-            <div class="masonry-item"><img src="images/street/street-09.jpg" alt="Street Stories 9"></div>
-            <div class="masonry-item"><img src="images/street/street-10.jpg" alt="Street Stories 10"></div>
-            <div class="masonry-item"><img src="images/street/street-11.jpg" alt="Street Stories 11"></div>
-            <div class="masonry-item"><img src="images/street/street-12.jpg" alt="Street Stories 12"></div>
-            <div class="masonry-item"><img src="images/street/street-13.jpg" alt="Street Stories 13"></div>
-            <div class="masonry-item"><img src="images/street/street-14.jpg" alt="Street Stories 14"></div>
-            <div class="masonry-item"><img src="images/street/street-15.jpg" alt="Street Stories 15"></div>
-            <div class="masonry-item"><img src="images/street/street-16.jpg" alt="Street Stories 16"></div>
-            <div class="masonry-item"><img src="images/street/street-17.jpg" alt="Street Stories 17"></div>
-            <div class="masonry-item"><img src="images/street/street-18.jpg" alt="Street Stories 18"></div>
-            <div class="masonry-item"><img src="images/street/street-19.jpg" alt="Street Stories 19"></div>
-            <div class="masonry-item"><img src="images/street/street-20.jpg" alt="Street Stories 20"></div>
-            <div class="masonry-item"><img src="images/street/street-21.jpg" alt="Street Stories 21"></div>
-            <div class="masonry-item"><img src="images/street/street-22.jpg" alt="Street Stories 22"></div>
-            <div class="masonry-item"><img src="images/street/street-23.jpg" alt="Street Stories 23"></div>
-            <div class="masonry-item"><img src="images/street/street-24.jpg" alt="Street Stories 24"></div>
-            <div class="masonry-item"><img src="images/street/street-25.jpg" alt="Street Stories 25"></div>
+            <div class="masonry-item"><img src="images/street/street-01.jpg" alt="Street Stories 1" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-02.jpg" alt="Street Stories 2" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-03.jpg" alt="Street Stories 3" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-04.jpg" alt="Street Stories 4" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-05.jpg" alt="Street Stories 5" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-06.jpg" alt="Street Stories 6" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-07.jpg" alt="Street Stories 7" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-08.jpg" alt="Street Stories 8" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-09.jpg" alt="Street Stories 9" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-10.jpg" alt="Street Stories 10" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-11.jpg" alt="Street Stories 11" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-12.jpg" alt="Street Stories 12" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-13.jpg" alt="Street Stories 13" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-14.jpg" alt="Street Stories 14" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-15.jpg" alt="Street Stories 15" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-16.jpg" alt="Street Stories 16" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-17.jpg" alt="Street Stories 17" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-18.jpg" alt="Street Stories 18" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-19.jpg" alt="Street Stories 19" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-20.jpg" alt="Street Stories 20" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-21.jpg" alt="Street Stories 21" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-22.jpg" alt="Street Stories 22" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-23.jpg" alt="Street Stories 23" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-24.jpg" alt="Street Stories 24" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/street/street-25.jpg" alt="Street Stories 25" loading="lazy"></div>
         </div>
     </div>
 
     <div id="gallery-wanderlust" class="page">
         <div class="gallery-header">
+            <button class="back-btn" data-page="home">← Photography</button>
             <h1 class="gallery-title">Wanderlust</h1>
             <p class="gallery-subtitle">Places Far & Wide</p>
         </div>
         <div class="masonry-grid">
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-01.jpg" alt="Wanderlust 1"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-02.jpg" alt="Wanderlust 2"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-03.jpg" alt="Wanderlust 3"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-04.jpg" alt="Wanderlust 4"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-05.jpg" alt="Wanderlust 5"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-06.jpg" alt="Wanderlust 6"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-07.jpg" alt="Wanderlust 7"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-08.jpg" alt="Wanderlust 8"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-09.jpg" alt="Wanderlust 9"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-10.jpg" alt="Wanderlust 10"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-11.jpg" alt="Wanderlust 11"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-12.jpg" alt="Wanderlust 12"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-13.jpg" alt="Wanderlust 13"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-14.jpg" alt="Wanderlust 14"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-15.jpg" alt="Wanderlust 15"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-16.jpg" alt="Wanderlust 16"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-17.jpg" alt="Wanderlust 17"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-18.jpg" alt="Wanderlust 18"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-19.jpg" alt="Wanderlust 19"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-20.jpg" alt="Wanderlust 20"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-21.jpg" alt="Wanderlust 21"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-22.jpg" alt="Wanderlust 22"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-23.jpg" alt="Wanderlust 23"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-24.jpg" alt="Wanderlust 24"></div>
-            <div class="masonry-item"><img src="images/wanderlust/wanderlust-25.jpg" alt="Wanderlust 25"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-01.jpg" alt="Wanderlust 1" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-02.jpg" alt="Wanderlust 2" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-03.jpg" alt="Wanderlust 3" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-04.jpg" alt="Wanderlust 4" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-05.jpg" alt="Wanderlust 5" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-06.jpg" alt="Wanderlust 6" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-07.jpg" alt="Wanderlust 7" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-08.jpg" alt="Wanderlust 8" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-09.jpg" alt="Wanderlust 9" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-10.jpg" alt="Wanderlust 10" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-11.jpg" alt="Wanderlust 11" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-12.jpg" alt="Wanderlust 12" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-13.jpg" alt="Wanderlust 13" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-14.jpg" alt="Wanderlust 14" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-15.jpg" alt="Wanderlust 15" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-16.jpg" alt="Wanderlust 16" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-17.jpg" alt="Wanderlust 17" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-18.jpg" alt="Wanderlust 18" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-19.jpg" alt="Wanderlust 19" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-20.jpg" alt="Wanderlust 20" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-21.jpg" alt="Wanderlust 21" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-22.jpg" alt="Wanderlust 22" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-23.jpg" alt="Wanderlust 23" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-24.jpg" alt="Wanderlust 24" loading="lazy"></div>
+            <div class="masonry-item"><img src="images/wanderlust/wanderlust-25.jpg" alt="Wanderlust 25" loading="lazy"></div>
         </div>
     </div>
 
@@ -758,7 +871,7 @@
                     <p class="article-excerpt">
                         One of the highlights of the few months before we moved to Africa was our chance to spend some time back in Northern Kentucky. The nine years we spent there were some of the most formative of our adult lives: two of our three children were born there. The people I still call my best friends live there. I finished seminary there. I was a librarian there. We planted a church there. No matter where in the world we live, Covington will always be Home.
                     </p>
-                    <a href="https://mericsherwood.substack.com/p/love-the-cov" target="_blank" class="read-more">Read More →</a>
+                    <a href="https://mericsherwood.substack.com/p/love-the-cov" target="_blank" rel="noopener" class="read-more">Read More →</a>
                 </article>
 
                 <article class="article-item">
@@ -767,17 +880,16 @@
                     <p class="article-excerpt">
                         We are incredibly fortunate to live in a place where we can walk to the Indian Ocean in about 15 minutes. The views are incredible. So, I decided to head down to the beachfront plaza and see what there was to see. I got some madafu and cassava chips from a street vendor and pulled out the camera when something struck me. All of these are photographed on my Canon RP with the 50mm lens.
                     </p>
-                    <a href="https://mericsherwood.substack.com/p/a-walk-on-the-beach" target="_blank" class="read-more">Read More →</a>
+                    <a href="https://mericsherwood.substack.com/p/a-walk-on-the-beach" target="_blank" rel="noopener" class="read-more">Read More →</a>
                 </article>
 
                 <article class="article-item">
                     <div class="article-date">December 28, 2025</div>
                     <h2 class="article-title">Lament in the Light of Christmas</h2>
                     <p class="article-excerpt">
-                        A voice is heard in Ramah, lamentation and bitter weeping. Rachel is weeping for her children; she refuses to be comforted for her children, because they are no more. - Jeremiah 31:15
-                        There is a comforting refrain we hear during Advent: the light will dawn into the world of darkness. Post tenebras lux, as the Reformers said. After darkness, light.
+                        A voice is heard in Ramah, lamentation and bitter weeping. Rachel is weeping for her children; she refuses to be comforted for her children, because they are no more. — Jeremiah 31:15. There is a comforting refrain we hear during Advent: the light will dawn into the world of darkness. Post tenebras lux, as the Reformers said. After darkness, light.
                     </p>
-                    <a href="https://mericsherwood.substack.com/p/lament-in-the-light-of-christmas" target="_blank" class="read-more">Read More →</a>
+                    <a href="https://mericsherwood.substack.com/p/lament-in-the-light-of-christmas" target="_blank" rel="noopener" class="read-more">Read More →</a>
                 </article>
 
                 <article class="article-item">
@@ -786,7 +898,7 @@
                     <p class="article-excerpt">
                         The last year-and-a-half has been strange, to say the least. I'll write more about that later, but suffice to say that last September, I resigned from the pastorate as our family prepared to follow God's calling to move to the Eastern coast of Africa, where I am a theological educator.
                     </p>
-                    <a href="https://mericsherwood.substack.com/p/new-year-strange-year-same-year" target="_blank" class="read-more">Read More →</a>
+                    <a href="https://mericsherwood.substack.com/p/new-year-strange-year-same-year" target="_blank" rel="noopener" class="read-more">Read More →</a>
                 </article>
             </div>
         </div>
@@ -800,10 +912,10 @@
                 <div class="about-text">
                     <h2>About</h2>
                     <p>
-                        I'm Eric, a photographer, storyteller, and theological educator exploring creativity as a means of spiritual formation. All creation declares the glory of it's Maker; I live to bear witness to it's song.
+                        I'm Eric, a photographer, storyteller, and theological educator exploring creativity as a means of spiritual formation. All creation declares the glory of its Maker; I live to bear witness to its song.
                     </p>
                     <p>
-                        Together with my wife and three lovely children, I'm learning what it means to thrive in East Africa, trading the familiar for new ways of seeing. The transition has been both disorienting and revelatory, pushing us to reconsider everything we thought we knew about home, community, and what it means to pay attention to the world God has made.	
+                        Together with my wife and three lovely children, I'm learning what it means to thrive in East Africa, trading the familiar for new ways of seeing. The transition has been both disorienting and revelatory, pushing us to reconsider everything we thought we knew about home, community, and what it means to pay attention to the world God has made.
                     </p>
                     <p>
                         When I'm not behind the camera or teaching theology, you'll find me running solo TTRPG campaigns, re-reading Tolkien for the hundredth time (yes, I have opinions about the films and Rings of Power), and trying to teach my kids that the stories we tell — whether through photographs, playtime, or adventures in Middle-earth — shape the people we become.
@@ -821,88 +933,172 @@
                 <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; line-height: 1.8; font-size: 1.05rem;">
                     I'm available for select photography and writing projects. Whether you're looking for compelling visual storytelling, thoughtful editorial content, or documentary work that captures the essence of place and people, I'd love to hear from you.
                 </p>
-                <form>
+
+                <!--
+                    CONTACT FORM SETUP (one-time, takes ~2 minutes):
+                    1. Go to https://formspree.io and sign up with your email.
+                    2. Create a new form — Formspree will give you a form ID like "xpzgkdqr".
+                    3. Replace YOUR_FORM_ID in the action URL below with that ID.
+                    That's it — submissions will arrive in your email inbox.
+                -->
+                <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                     <div class="form-group">
-                        <label for="name2">Name</label>
-                        <input type="text" id="name2" name="name" required>
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="email2">Email</label>
-                        <input type="email" id="email2" name="email" required>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="message2">Message</label>
-                        <textarea id="message2" name="message" required></textarea>
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
                     </div>
                     <button type="submit" class="submit-btn">Send Message</button>
                 </form>
+                <div class="form-success" id="form-success" style="display: none;">
+                    Thank you. I'll be in touch soon.
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
-        <button class="lightbox-close">&times;</button>
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+        <button class="lightbox-prev" id="lightbox-prev">&#8592;</button>
         <img src="" alt="Lightbox image" id="lightbox-img">
+        <button class="lightbox-next" id="lightbox-next">&#8594;</button>
     </div>
 
+    <!-- Footer -->
+    <footer class="site-footer">
+        <span>&copy; 2026 M. Eric Sherwood</span>
+        <a href="https://mericsherwood.substack.com" target="_blank" rel="noopener">Substack</a>
+    </footer>
+
     <script>
-        // Page navigation
-        const navLinks = document.querySelectorAll('.nav-links a');
+        // ─── Page Navigation ──────────────────────────────────────────────────────
         const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        function showPage(pageId) {
+            pages.forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+
+            // Update active nav link
+            // Gallery sub-pages count as "Photography" being active
+            const navTarget = pageId.startsWith('gallery-') ? 'home' : pageId;
+            navLinks.forEach(a => {
+                a.classList.toggle('active', a.dataset.page === navTarget);
+            });
+        }
+
+        // Set initial active state on Photography
+        document.querySelector('.nav-links a[data-page="home"]').classList.add('active');
 
         navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+            link.addEventListener('click', e => {
                 e.preventDefault();
-                const targetPage = link.dataset.page;
-                
-                pages.forEach(page => page.classList.remove('active'));
-                document.getElementById(targetPage).classList.add('active');
-                
-                window.scrollTo(0, 0);
+                showPage(link.dataset.page);
             });
         });
 
-        // Gallery navigation
-        const galleryItems = document.querySelectorAll('.gallery-item');
-        
-        galleryItems.forEach(item => {
+        // Gallery category cards (home grid)
+        document.querySelectorAll('.gallery-item').forEach(item => {
             item.addEventListener('click', () => {
-                const gallery = item.dataset.gallery;
-                pages.forEach(page => page.classList.remove('active'));
-                document.getElementById(`gallery-${gallery}`).classList.add('active');
-                window.scrollTo(0, 0);
+                showPage('gallery-' + item.dataset.gallery);
             });
         });
 
-        // Lightbox
-        const lightbox = document.getElementById('lightbox');
+        // Back buttons on gallery pages
+        document.querySelectorAll('.back-btn').forEach(btn => {
+            btn.addEventListener('click', () => showPage(btn.dataset.page));
+        });
+
+        // ─── Lightbox ─────────────────────────────────────────────────────────────
+        const lightbox    = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
-        const lightboxClose = document.querySelector('.lightbox-close');
-        const masonryItems = document.querySelectorAll('.masonry-item');
+        const closeBtn    = document.getElementById('lightbox-close');
+        const prevBtn     = document.getElementById('lightbox-prev');
+        const nextBtn     = document.getElementById('lightbox-next');
 
-        masonryItems.forEach(item => {
+        let currentImages = [];
+        let currentIndex  = 0;
+
+        function openLightbox(index) {
+            currentIndex = index;
+            lightboxImg.src = currentImages[currentIndex];
+            lightbox.classList.add('active');
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === currentImages.length - 1;
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightboxImg.src = '';
+        }
+
+        document.querySelectorAll('.masonry-item').forEach(item => {
             item.addEventListener('click', () => {
-                const img = item.querySelector('img');
-                lightboxImg.src = img.src;
-                lightbox.classList.add('active');
+                const galleryPage = item.closest('.page');
+                const allItems = Array.from(galleryPage.querySelectorAll('.masonry-item'));
+                currentImages = allItems.map(i => i.querySelector('img').src);
+                openLightbox(allItems.indexOf(item));
             });
         });
 
-        lightboxClose.addEventListener('click', () => {
-            lightbox.classList.remove('active');
+        closeBtn.addEventListener('click', closeLightbox);
+
+        lightbox.addEventListener('click', e => {
+            if (e.target === lightbox) closeLightbox();
         });
 
-        lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                lightbox.classList.remove('active');
-            }
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) openLightbox(currentIndex - 1);
         });
 
-        // Escape key closes lightbox
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                lightbox.classList.remove('active');
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < currentImages.length - 1) openLightbox(currentIndex + 1);
+        });
+
+        document.addEventListener('keydown', e => {
+            if (!lightbox.classList.contains('active')) return;
+            if (e.key === 'Escape')      closeLightbox();
+            if (e.key === 'ArrowLeft')   prevBtn.click();
+            if (e.key === 'ArrowRight')  nextBtn.click();
+        });
+
+        // ─── Contact Form ─────────────────────────────────────────────────────────
+        const contactForm    = document.getElementById('contact-form');
+        const formSuccess    = document.getElementById('form-success');
+        const submitBtn      = contactForm.querySelector('.submit-btn');
+
+        contactForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending…';
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: new FormData(contactForm),
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    contactForm.style.display = 'none';
+                    formSuccess.style.display = 'block';
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                    alert('Something went wrong. Please try again or email me directly.');
+                }
+            } catch {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+                alert('Could not send. Please check your connection and try again.');
             }
         });
     </script>
